@@ -67,6 +67,7 @@ python manage.py runserver
 ```
 
 ## 📡 API Endpoints
-- **Submit Job**: `POST /api/jobs/submit/`
-- **List Jobs**: `GET /api/jobs/`
-- **Retrieve Job**: `GET /api/jobs/<id>/`
+- **Submit Job**: `POST /create-job`
+- **List Jobs**: `GET /list-jobs`
+- **Retrieve Job**: `GET /job-status/<id>/`
+- **POST Auth Token**: `GET /api-token-auth`
