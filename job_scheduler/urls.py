@@ -16,9 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import handler404, handler500
+from django.shortcuts import render
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-     path('', include('apps.users.urls')),
+    path('', include('apps.users.urls')),
     path('', include('apps.jobs.urls')),
 ]
+
+
+def custom_error_page(request, exception=None, status_code=500):
+    context = {
+        "status_code": status_code,
+        "message": "Oops! Something went wrong." if status_code == 500 else "Page not found.",
+    }
+    return render(request, "error-fallback.html", context, status=status_code)
+
+handler404 = lambda request, exception: custom_error_page(request, exception, 404)
+handler500 = lambda request: custom_error_page(request, status_code=500)

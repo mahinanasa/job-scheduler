@@ -55,7 +55,7 @@ INSTALLED_APPS = [
 CELERY_BEAT_SCHEDULE = {
     'process-jobs-every-minute': {
         'task': 'apps.scheduler.tasks.process_jobs',
-        'schedule':1800.0
+        'schedule':60
     },
 }
 

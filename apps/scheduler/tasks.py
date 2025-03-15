@@ -6,8 +6,6 @@ from celery import shared_task
 from queue import PriorityQueue
 
 MAX_RUNNING_JOBS = 3  # Maximum number of jobs running at the same time
-PRIORITY_MAP = {'high': 1, 'medium': 2, 'low': 3} 
-
 @shared_task
 def process_jobs():
 
