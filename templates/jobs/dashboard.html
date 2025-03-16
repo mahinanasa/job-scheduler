@@ -65,7 +65,7 @@
                     <tr>
                         <td>{{ job.name }}</td>
                         <td>{{ job.get_priority_display }}</td>
-                        <td>{{ job.get_status_display }}</td>
+                        <td id="job-status-{{job.id}}">{{ job.get_status_display }}</td>
                         <td>{{ job.estimated_duration }} sec</td>
                         <td>{{ job.start_time|default:"-" }}</td>
                         <td>{{ job.end_time|default:"-" }}</td>

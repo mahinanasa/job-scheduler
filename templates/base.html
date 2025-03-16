@@ -6,6 +6,26 @@
     <title>{% block title %}Job Scheduler{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script>
+        var socket = new WebSocket("ws://localhost:8000/ws/jobs/");
+
+        socket.onmessage = function(event) {
+       
+            var data = JSON.parse(event.data);
+            if(data.message){
+                console.log(data.message);
+                return;
+            }
+            debugger;
+            console.log(`Job ${data.id} updated: ${data.status}`);
+      
+            // Update the job status in the UI dynamically
+            var jobElement = document.getElementById(`job-status-${data.id}`);
+            if (jobElement) {
+                jobElement.innerText = `${data.status.charAt(0).toUpperCase() + data.status.slice(1)}`
+            }
+        };
+      </script>
 <style>
     .bg-black  {
         color: #212529;
