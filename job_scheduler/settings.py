@@ -132,9 +132,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'job_scheduler',
-        'USER': 'admin',
-        'PASSWORD': 'myadminpassword',
-        'HOST': 'localhost',
+        'USER': 'jobscheduler_9i5m_user',
+        'PASSWORD': 'i72x8JmL0wv4xEuPUYNb9UdjMCVN3088',
+        'HOST': 'oregon-postgres.render.com ',
         'PORT': '5432',
     }
 }
