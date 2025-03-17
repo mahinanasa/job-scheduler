@@ -136,7 +136,7 @@ DATABASES = {
         'NAME': 'job_scheduler',
         'USER': 'jobscheduler_9i5m_user',
         'PASSWORD': 'i72x8JmL0wv4xEuPUYNb9UdjMCVN3088',
-        'HOST': 'oregon-postgres.render.com ',
+        'HOST': 'oregon-postgres.render.com',
         'PORT': '5432',
     }
 }
