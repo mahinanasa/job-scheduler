@@ -37,6 +37,8 @@ AUTH_USER_MODEL = 'users.AppUser'
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,6 +53,16 @@ INSTALLED_APPS = [
     'apps.scheduler',
 ]
 
+ASGI_APPLICATION = "job_scheduler.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 CELERY_BEAT_SCHEDULE = {
     'process-jobs-every-minute': {

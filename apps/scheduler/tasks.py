@@ -4,6 +4,8 @@ from django.utils import timezone
 from apps.jobs.models import Job  
 from celery import shared_task
 from queue import PriorityQueue
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 MAX_RUNNING_JOBS = 3  # Maximum number of jobs running at the same time
 @shared_task
@@ -45,14 +47,30 @@ def simulate_job_execution(job):
         job.status = 'running'
         job.start_time = timezone.now()
         job.save()
+        send_job_update(job) 
         # Simulate job execution
         time.sleep(job.estimated_duration) 
 
         job.status = 'completed'
         job.end_time = timezone.now()
         job.save()
+        send_job_update(job) 
 
     except Exception as e:
         job.status = 'failed'
         job.save()
-            
+        send_job_update(job) 
+        
+def send_job_update(job):
+    """Notify WebSocket clients about job status updates"""
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "job_updates",
+        {
+            "type": "send_job_status",
+            "job": {
+                "id": job.id,
+                "status": job.status
+            },
+        },
+    )            
