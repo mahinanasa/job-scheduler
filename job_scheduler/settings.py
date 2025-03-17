@@ -138,6 +138,9 @@ DATABASES = {
         'PASSWORD': 'i72x8JmL0wv4xEuPUYNb9UdjMCVN3088',
         'HOST': 'oregon-postgres.render.com',
         'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',  
+        },
     }
 }
 
