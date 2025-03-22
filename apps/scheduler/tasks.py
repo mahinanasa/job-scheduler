@@ -10,34 +10,34 @@ from asgiref.sync import async_to_sync
 MAX_RUNNING_JOBS = 3  # Maximum number of jobs running at the same time
 @shared_task
 def process_jobs():
-
-    # Priority Queue to store jobs
     pq = PriorityQueue()
 
     # Fetch all pending jobs
     jobs = Job.objects.filter(status='pending').order_by('priority_value')
     for job in jobs:
-        priority = job.priority
         if job.deadline:
             # Use EDF (Earliest Deadline First) if there's a deadline
-            priority = job.deadline.timestamp()  
+            priority_key = (job.deadline.timestamp(), job.priority_value, job.id)  
         else:
-            priority = job.priority_value
-        
-        print(f"Job {job.id} with priority: {priority}")
-        pq.put((priority, job.id, job)) 
-    
-    running_jobs = Job.objects.filter(status='running').count()
+            priority_key = (float('inf'), job.priority_value, job.id)
 
+        print(f"Job {job.id} -> Deadline: {job.deadline}, Priority: {job.priority_value}")
+        pq.put((priority_key, job))
+
+    running_jobs = Job.objects.filter(status='running').count()
+    threads = []
     while not pq.empty() and running_jobs < MAX_RUNNING_JOBS:
-        _, _, job = pq.get() 
+        _, job = pq.get()
 
         if job.status == 'pending':
             running_jobs += 1
             job_thread = Thread(target=simulate_job_execution, args=(job,))
             job_thread.start()
-            job_thread.join()  
-            running_jobs -= 1
+            threads.append(job_thread) 
+            #running_jobs -= 1
+
+    for thread in threads:
+     thread.join()        
 
     # Simulate job execution
 def simulate_job_execution(job):
